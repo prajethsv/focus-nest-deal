@@ -25,6 +25,8 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    if (coarse || window.innerWidth < 768) return undefined;
     const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
     window.__lenis = lenis;
     let alive = true;

@@ -19,7 +19,8 @@ export default function Particles() {
     let raf;
     let w = 0;
     let h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const smallScreen = window.innerWidth < 768;
+    const dpr = smallScreen ? 1 : Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
       w = canvas.width = window.innerWidth * dpr;
@@ -30,8 +31,8 @@ export default function Particles() {
     resize();
     window.addEventListener("resize", resize);
 
-    const N = 42;
-    const ps = Array.from({ length: N }, () => ({
+      const N = smallScreen ? 16 : 42;
+      const ps = Array.from({ length: N }, () => ({
       x: Math.random(),
       y: Math.random(),
       s: 0.4 + Math.random() * 1.2,
