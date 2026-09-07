@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Nest",
+  "version": "0.5.1",
+  "description": "A cozy study space in your browser: focus timer, tasks, calm environments, a growing companion, and an optional distraction blocker.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Focus Nest"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "alarms",
+    "identity",
+    "offscreen",
+    "declarativeNetRequest",
+    "scripting",
+    "tabs",
+    "webNavigation"
+  ],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "host_permissions": [
+    "https://api.spotify.com/*",
+    "https://accounts.spotify.com/*",
+    "https://i.scdn.co/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html", "overlay/player.css"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

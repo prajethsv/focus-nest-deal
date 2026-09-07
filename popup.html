@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>Focus Nest</title>
+</head>
+<body data-theme="cozy" data-appearance="system">
+  <div id="decor-layer" class="decor-layer" aria-hidden="true"></div>
+
+  <div id="app">
+    <!-- ONBOARDING -->
+    <section id="onboarding" class="screen" hidden>
+      <p class="eyebrow">Welcome</p>
+      <h1 class="display">Focus Nest</h1>
+      <p class="lead">A small, calm corner of your browser for getting things done.</p>
+      <ol class="onboard-steps">
+        <li>Pick an environment that feels good.</li>
+        <li>Add one small thing you'd like to finish.</li>
+        <li>Start a focus session — something is waiting in the nest.</li>
+      </ol>
+      <fieldset class="onboard-fieldset">
+        <legend>Choose your environment</legend>
+        <div id="onboard-envs" class="env-grid" role="radiogroup" aria-label="Environment"></div>
+      </fieldset>
+      <button id="onboard-done" class="primary block">Enter the nest</button>
+    </section>
+
+    <!-- MAIN -->
+    <div id="main" class="screen" hidden>
+      <header class="app-head">
+        <div>
+          <p class="eyebrow">Focus Nest</p>
+          <h1 class="display small" id="greeting">Today</h1>
+        </div>
+        <div class="header-actions">
+          <button id="sound-btn" class="icon-btn" aria-label="Mute sounds" aria-pressed="false" title="Sound">🔔</button>
+        </div>
+      </header>
+
+      <nav class="tabbar" role="tablist" aria-label="Sections">
+        <button class="tab" role="tab" id="tab-study" data-tab="study"
+                aria-controls="panel-study" aria-selected="true">Study</button>
+        <button class="tab" role="tab" id="tab-nest" data-tab="nest"
+                aria-controls="panel-nest" aria-selected="false" tabindex="-1">Nest</button>
+        <button class="tab" role="tab" id="tab-history" data-tab="history"
+                aria-controls="panel-history" aria-selected="false" tabindex="-1">History</button>
+        <button class="tab" role="tab" id="tab-settings" data-tab="settings"
+                aria-controls="panel-settings" aria-selected="false" tabindex="-1">Settings</button>
+      </nav>
+
+      <!-- STUDY -->
+      <div class="panel" id="panel-study" role="tabpanel" aria-labelledby="tab-study" tabindex="0">
+        <section class="card timer-card" aria-labelledby="session-label">
+          <div class="card-head tight">
+            <p id="session-label" class="session-label">Focus</p>
+            <span id="timer-meta" class="pill">Session 1 of 4</span>
+          </div>
+          <p id="timer-display" class="timer" role="timer" aria-live="off">25:00</p>
+          <div class="progress" role="presentation"><span id="timer-progress"></span></div>
+
+          <div class="presets" role="group" aria-label="Quick focus length">
+            <span class="presets-label">Focus for</span>
+            <div id="preset-row" class="preset-row"></div>
+          </div>
+
+          <div class="row center controls">
+            <button id="start-btn" class="primary">Start</button>
+            <button id="pause-btn" class="ghost" disabled>Pause</button>
+            <button id="reset-btn" class="ghost">Reset</button>
+            <button id="skip-btn" class="ghost" title="Skip to next session">Skip</button>
+          </div>
+          <p id="session-note" class="note"></p>
+          <p id="blocker-note" class="note" hidden></p>
+          <p id="timer-live" class="sr-only" aria-live="polite"></p>
+        </section>
+
+        <!-- TASKS -->
+        <section class="card tasks-card" aria-labelledby="tasks-heading">
+          <div class="card-head">
+            <h2 id="tasks-heading">Today's tasks</h2>
+            <span id="task-count" class="pill">0/0</span>
+          </div>
+          <form id="task-form" class="row">
+            <label class="sr-only" for="new-task">New task</label>
+            <input type="text" id="new-task" class="task-input" placeholder="Add a task…"
+                   autocomplete="off" maxlength="120" />
+            <button type="submit" class="primary" aria-label="Add task">+</button>
+          </form>
+          <ul id="task-list" class="task-list"></ul>
+          <p id="tasks-empty" class="empty">Nothing here yet — add one small thing you'd like to finish.</p>
+        </section>
+
+        <!-- MUSIC -->
+        <section id="spotify-card" class="card spotify-card" aria-labelledby="music-heading" data-has-spot-colors="false">
+          <div class="spotify-glow" aria-hidden="true"></div>
+          <div class="spotify-content">
+            <div class="card-head">
+              <h2 id="music-heading">Music</h2>
+              <div class="spotify-head-actions">
+                <span id="spotify-pill" class="pill">Disconnected</span>
+                <div id="spotify-corner" class="spotify-corner" hidden role="group" aria-label="Pinned player corner">
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="bottom-left" title="Bottom left" aria-label="Pin bottom left">↙</button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="bottom-right" title="Bottom right" aria-label="Pin bottom right">↘</button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="top-left" title="Top left" aria-label="Pin top left">↖</button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="top-right" title="Top right" aria-label="Pin top right">↗</button>
+                </div>
+                <button id="spotify-pin" class="icon-btn spotify-pin" aria-label="Pin player on websites" aria-pressed="false" title="Pin over websites" hidden>📌</button>
+              </div>
+            </div>
+            <div id="spotify-body">
+              <p id="spotify-status" class="muted">Spotify isn't connected yet.</p>
+              <div id="spotify-track" class="spotify-track" hidden>
+                <img id="spotify-art" class="spotify-art" alt="" width="72" height="72" />
+                <div class="spotify-track-text">
+                  <strong id="spotify-title">—</strong>
+                  <span id="spotify-artist">—</span>
+                  <span id="spotify-album" class="spotify-album"></span>
+                </div>
+              </div>
+              <div class="spotify-transport row">
+                <button id="spotify-prev" class="ghost spotify-ctrl" aria-label="Previous track" hidden>⏮</button>
+                <button id="spotify-toggle" class="primary spotify-play" aria-label="Play or pause" hidden>▶</button>
+                <button id="spotify-next" class="ghost spotify-ctrl" aria-label="Next track" hidden>⏭</button>
+                <button id="spotify-connect" class="primary">Connect Spotify</button>
+                <button id="spotify-disconnect" class="ghost" hidden>Disconnect</button>
+              </div>
+              <div id="spotify-redirect-box" class="spotify-redirect-box">
+                <p class="muted small">Spotify must allow this exact redirect URI (Dashboard → your app → Edit settings → Redirect URIs). Trailing slash matters.</p>
+                <div class="spotify-redirect-row">
+                  <code id="spotify-redirect" class="spotify-redirect-code">…</code>
+                  <button type="button" id="spotify-copy-redirect" class="ghost" title="Copy redirect URI">Copy</button>
+                </div>
+              </div>
+              <details id="spotify-setup" class="setup" hidden>
+                <summary>What setup does Spotify need?</summary>
+                <ol class="setup-steps">
+                  <li>Create an app at developer.spotify.com/dashboard.</li>
+                  <li>Paste its Client ID into <code>data/spotify.config.js</code>.</li>
+                  <li>Add the redirect URI above to that app (must match character-for-character).</li>
+                  <li>Click <strong>Save</strong>, reload this extension, then Connect again.</li>
+                </ol>
+              </details>
+              <p id="spotify-error" class="error" role="alert" hidden></p>
+              <p id="spotify-pin-note" class="note spotify-pin-note" hidden>Pinned — mini player stays on websites until you unpin.</p>
+            </div>
+          </div>
+        </section>
+
+        <p id="quote" class="quote"></p>
+      </div>
+
+      <!-- NEST -->
+      <div class="panel" id="panel-nest" role="tabpanel" aria-labelledby="tab-nest" tabindex="0" hidden>
+        <section class="card nest-card" aria-labelledby="nest-heading">
+          <div class="card-head">
+            <h2 id="nest-heading">The nest</h2>
+            <span id="nest-stage" class="pill">Speckled egg</span>
+          </div>
+          <div class="nest-stage-wrap">
+            <div id="nest-art" class="nest-art" aria-hidden="true"></div>
+            <p id="nest-session-cue" class="nest-session-cue" hidden>The shell stirred.</p>
+          </div>
+          <div class="nest-text">
+            <p id="nest-blurb" class="muted"></p>
+            <div class="progress slim"><span id="nest-progress"></span></div>
+            <p id="nest-next" class="muted small"></p>
+          </div>
+          <p id="nest-milestone" class="milestone" role="status" hidden></p>
+
+          <div id="pet-designer" class="pet-designer">
+            <div class="card-head tight">
+              <h2>Design your companion</h2>
+              <span class="pill">Looks</span>
+            </div>
+            <p class="muted small pet-designer-lead">Colors apply once it hatches — the egg keeps its speckled shell until then.</p>
+            <div id="pet-presets" class="pet-presets" role="group" aria-label="Color presets"></div>
+            <div class="pet-fields">
+              <label class="pet-field"><span>Body</span><input type="color" id="pet-body" value="#e8b86d" /></label>
+              <label class="pet-field"><span>Belly</span><input type="color" id="pet-belly" value="#fff6e8" /></label>
+              <label class="pet-field"><span>Cheeks</span><input type="color" id="pet-cheek" value="#f0a0a0" /></label>
+              <label class="pet-field"><span>Accent</span><input type="color" id="pet-accent" value="#c48a3a" /></label>
+            </div>
+            <div class="row pet-pattern-row" role="radiogroup" aria-label="Pattern">
+              <button type="button" class="ghost pet-pattern" data-pattern="none">Plain</button>
+              <button type="button" class="ghost pet-pattern" data-pattern="spots">Spots</button>
+              <button type="button" class="ghost pet-pattern" data-pattern="stripe">Stripe</button>
+            </div>
+            <label class="field nest-name-field"><span>Name</span>
+              <input type="text" id="nest-name" maxlength="24" placeholder="Optional name" autocomplete="off" />
+            </label>
+          </div>
+
+          <p class="muted small nest-foot">Your companion grows only from finished focus sessions. Nothing is ever lost.</p>
+        </section>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="panel" id="panel-history" role="tabpanel" aria-labelledby="tab-history" tabindex="0" hidden>
+        <section class="card history-card" aria-labelledby="history-heading">
+          <div class="card-head tight">
+            <h2 id="history-heading">Study history</h2>
+            <span id="stat-streak-pill" class="pill">0 day streak</span>
+          </div>
+          <div class="cal-head">
+            <button id="cal-prev" class="icon-btn" aria-label="Previous month">‹</button>
+            <p id="cal-month" class="cal-month" aria-live="polite">—</p>
+            <button id="cal-next" class="icon-btn" aria-label="Next month">›</button>
+          </div>
+          <div class="cal-dow" aria-hidden="true">
+            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+          </div>
+          <div id="cal-grid" class="cal-grid cal-grid-compact" role="grid" aria-labelledby="cal-month"></div>
+          <div class="day-detail">
+            <h3 id="day-title" class="day-title">Today</h3>
+            <ul id="day-list" class="session-list"></ul>
+            <p id="day-empty" class="empty">No finished focus sessions on this day yet.</p>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="stats-heading">
+          <div class="card-head">
+            <h2 id="stats-heading">Today</h2>
+            <span id="stats-date" class="pill"></span>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong id="stat-sessions">0</strong><span>sessions</span></div>
+            <div class="stat"><strong id="stat-minutes">0</strong><span>focus min</span></div>
+            <div class="stat"><strong id="stat-tasks">0</strong><span>done</span></div>
+            <div class="stat"><strong id="stat-streak">0</strong><span>day streak</span></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="panel" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
+        <section class="card">
+          <h2>Environment</h2>
+          <nav id="env-picker" class="env-grid settings-envs" role="radiogroup" aria-label="Environment"></nav>
+          <div class="row" role="radiogroup" aria-label="Appearance">
+            <button class="ghost appearance-btn" role="radio" aria-checked="false" data-appearance="light">Light</button>
+            <button class="ghost appearance-btn" role="radio" aria-checked="false" data-appearance="dark">Dark</button>
+            <button class="ghost appearance-btn" role="radio" aria-checked="false" data-appearance="system">System</button>
+          </div>
+          <label class="check"><input type="checkbox" id="set-animations" /> <span>Floating environment details</span></label>
+          <p class="muted small">Motion is always off if your system asks for reduced motion.</p>
+        </section>
+
+        <section class="card">
+          <h2>Sound</h2>
+          <label class="check"><input type="checkbox" id="set-clicks" /> <span>Button clicks</span></label>
+          <label class="check"><input type="checkbox" id="set-chime" /> <span>Session-end chime</span></label>
+          <label class="field"><span>Volume</span>
+            <input type="range" id="set-volume" min="0" max="100" step="5" aria-describedby="volume-hint" /></label>
+          <p id="volume-hint" class="muted small">Tones are generated in the browser — no files, no network.</p>
+        </section>
+
+        <section class="card">
+          <h2>Timer</h2>
+          <label class="field"><span>Focus length (min)</span>
+            <input type="number" id="set-focus" min="1" max="120" /></label>
+          <label class="field"><span>Short break (min)</span>
+            <input type="number" id="set-short" min="1" max="60" /></label>
+          <label class="field"><span>Long break (min)</span>
+            <input type="number" id="set-long" min="1" max="60" /></label>
+          <label class="field"><span>Sessions before long break</span>
+            <input type="number" id="set-cycle" min="2" max="12" /></label>
+          <p id="length-note" class="muted small" role="status">Length changes apply to the next session if one is already under way.</p>
+          <label class="check"><input type="checkbox" id="set-autostart" /> <span>Auto-start next session</span></label>
+          <label class="check"><input type="checkbox" id="set-quotes" /> <span>Show gentle quotes</span></label>
+          <label class="check"><input type="checkbox" id="set-ritual" /> <span>“Phone away” moment before focus</span></label>
+        </section>
+
+        <section class="card">
+          <h2>Distraction blocker</h2>
+          <label class="check"><input type="checkbox" id="set-blocker" /> <span>Block my list during focus sessions</span></label>
+          <p class="muted small">
+            Blocking applies only while a focus session is running — never during breaks or when
+            paused. Your list stays on this device.
+          </p>
+          <form id="block-form" class="row">
+            <label class="sr-only" for="block-input">Website to block</label>
+            <input type="text" id="block-input" placeholder="e.g. reddit.com" autocomplete="off" />
+            <button type="submit" class="primary" aria-label="Add website">+</button>
+          </form>
+          <p id="block-error" class="error" role="alert" hidden></p>
+          <ul id="block-list" class="chip-list"></ul>
+          <p id="block-empty" class="empty">No sites yet. Add the one that steals the most time.</p>
+          <div class="permission">
+            <p id="perm-status" class="muted small"></p>
+            <div class="row">
+              <button id="perm-grant" class="ghost">Show friendly blocked page</button>
+              <button id="perm-revoke" class="ghost" hidden>Remove site access</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Data</h2>
+          <p class="muted">Everything stays on this device in your browser's extension storage.</p>
+          <div class="row">
+            <button id="clear-tasks" class="ghost">Clear tasks</button>
+            <button id="reset-all" class="ghost danger">Reset everything</button>
+          </div>
+        </section>
+
+        <p class="muted small">Focus Nest beta · v0.5.1</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRE-FOCUS RITUAL -->
+  <div id="ritual" class="ritual" role="dialog" aria-modal="true" aria-labelledby="ritual-title" hidden>
+    <div class="ritual-inner">
+      <div class="ritual-art" aria-hidden="true">
+        <span class="ritual-surface"></span>
+        <span class="ritual-nest"></span>
+        <span class="ritual-phone"><i class="ritual-screen"></i></span>
+      </div>
+      <p class="eyebrow">One small ritual</p>
+      <h2 id="ritual-title" class="display small">Phone away.</h2>
+      <p class="lead small">Face down, out of reach. Then we begin.</p>
+      <div class="row center">
+        <button id="ritual-start" class="primary" type="button">Start focus</button>
+        <button id="ritual-skip" class="ghost" type="button">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKIP CONFIRMATION -->
+  <div id="confirm" class="ritual" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+    <div class="ritual-inner confirm-inner">
+      <p class="eyebrow">Just checking</p>
+      <h2 id="confirm-title" class="display small">Skip this session?</h2>
+      <p id="confirm-body" class="lead small">It won't count towards your history or your nest.</p>
+      <div class="row center">
+        <button id="confirm-cancel" class="ghost" type="button">Keep going</button>
+        <button id="confirm-ok" class="primary" type="button">Skip session</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
