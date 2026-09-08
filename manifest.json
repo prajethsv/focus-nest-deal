@@ -29,7 +29,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["blocked.html", "overlay/player.css"],
+      "resources": ["blocked.html", "overlay/player.css", "fonts/Fraunces-Variable.ttf", "fonts/Fraunces-Bold.ttf"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],

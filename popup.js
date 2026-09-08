@@ -16,6 +16,13 @@ import { applyColors, clearColors, FALLBACK_COLORS, extractColors } from "./src/
 import { artForStage, PET_PRESETS, normalizePet } from "./src/petArt.js";
 
 const $ = (id) => document.getElementById(id);
+const ICONS = {
+  soundOn: '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="M15 9.5a4 4 0 0 1 0 5M17.5 7a7.5 7.5 0 0 1 0 10"/></svg>',
+  soundOff: '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m17 9 5 6M22 9l-5 6"/></svg>',
+  play: '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 8 6-8 6V6Z"/></svg>',
+  pause: '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12"/></svg>',
+  trash: '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 4h4l1 3H9l1-3ZM8 7l1 13h6l1-13M10 10v7M14 10v7"/></svg>',
+};
 let settings;
 let spotifyPollTimer = null;
 let lastSpotifyTrackId = null;
@@ -103,7 +110,7 @@ function syncSound() {
   configureSound(settings);
   const on = settings.soundClicks || settings.soundChime;
   const btn = $("sound-btn");
-  btn.textContent = on ? "🔔" : "🔕";
+  btn.innerHTML = on ? ICONS.soundOn : ICONS.soundOff;
   btn.setAttribute("aria-pressed", String(!on));
   btn.setAttribute("aria-label", on ? "Mute sounds" : "Unmute sounds");
 }
@@ -124,7 +131,7 @@ function renderEnvButtons(container, current, onPick) {
       btn.setAttribute("aria-checked", String(env.id === current));
       btn.setAttribute("aria-label", `${env.label} — ${env.description}`);
       btn.title = `${env.label} — ${env.description}`;
-      btn.innerHTML = `${env.emoji}<small>${env.label}</small>`;
+      btn.innerHTML = `<span class="env-icon env-icon--${env.id}" aria-hidden="true"></span><small>${env.label}</small>`;
       btn.addEventListener("click", () => {
         playClick();
         onPick(env.id);
@@ -459,7 +466,7 @@ async function renderTasks() {
 
       const del = document.createElement("button");
       del.className = "task-del";
-      del.textContent = "×";
+      del.innerHTML = ICONS.trash;
       del.setAttribute("aria-label", `Delete task: ${t.text}`);
       del.addEventListener("click", async () => {
         playClick();
@@ -603,7 +610,7 @@ async function renderBlocker() {
       name.textContent = domain;
       const del = document.createElement("button");
       del.type = "button";
-      del.textContent = "×";
+      del.innerHTML = ICONS.trash;
       del.setAttribute("aria-label", `Stop blocking ${domain}`);
       del.addEventListener("click", async () => {
         playClick();
@@ -678,34 +685,15 @@ function paintSpotifyTrack(now) {
   $("spotify-album").textContent = now.album || "";
   if (now.art) $("spotify-art").src = now.art;
   $("spotify-art").alt = `Album art for ${now.title}`;
-  $("spotify-toggle").textContent = now.isPlaying ? "⏸" : "▶";
+  $("spotify-toggle").innerHTML = now.isPlaying ? ICONS.pause : ICONS.play;
   setSpotifyGradient(now.colors, true);
   lastSpotifyTrackId = now.id || null;
   return true;
 }
 
-function fillSpotifyRedirect() {
-  const el = $("spotify-redirect");
-  const box = $("spotify-redirect-box");
-  let uri = "";
-  try {
-    uri = chrome.identity.getRedirectURL();
-  } catch {
-    uri = "";
-  }
-  if (el) el.textContent = uri || "(reload extension to see redirect URI)";
-  return uri;
-}
-
-function setRedirectBoxVisible(visible) {
-  const box = $("spotify-redirect-box");
-  if (box) box.hidden = !visible;
-}
-
 async function renderSpotify() {
   setSpotifyError("");
   const track = $("spotify-track");
-  const redirectUri = fillSpotifyRedirect();
 
   if (!spotify.isConfigured()) {
     $("spotify-pill").textContent = "Setup needed";
@@ -713,7 +701,6 @@ async function renderSpotify() {
       "Spotify needs your own developer client ID before it can connect.";
     $("spotify-status").hidden = false;
     $("spotify-setup").hidden = false;
-    setRedirectBoxVisible(true);
     track.hidden = true;
     showSpotifyControls(false);
     $("spotify-connect").disabled = true;
@@ -729,20 +716,15 @@ async function renderSpotify() {
     $("spotify-pill").textContent = pending ? "Signing in…" : "Disconnected";
     $("spotify-status").textContent = pending
       ? "Finish signing in in the Spotify tab, then reopen Focus Nest."
-      : "Connect Spotify to see and control what's playing. If you see redirect_uri errors, copy the URI below into your Spotify app settings.";
+      : "Connect Spotify to see and control what's playing.";
     $("spotify-status").hidden = false;
-    setRedirectBoxVisible(true);
     track.hidden = true;
     showSpotifyControls(false);
     setSpotifyGradient(null, false);
     $("spotify-pin-note").hidden = true;
-    if (!redirectUri) {
-      setSpotifyError("Couldn't read the redirect URI — reload the extension on opera://extensions.");
-    }
     return;
   }
 
-  setRedirectBoxVisible(false);
   showSpotifyControls(true);
   await syncPinButton();
 
@@ -824,7 +806,7 @@ async function renderSpotifyQuiet() {
       return;
     }
     if (snap.id === lastSpotifyTrackId && $("spotify-pill").textContent === (snap.isPlaying ? "Playing" : "Paused")) {
-      $("spotify-toggle").textContent = snap.isPlaying ? "⏸" : "▶";
+      $("spotify-toggle").innerHTML = snap.isPlaying ? ICONS.pause : ICONS.play;
       return;
     }
     $("spotify-pill").textContent = snap.isPlaying ? "Playing" : "Paused";
@@ -1071,18 +1053,6 @@ function wire() {
   $("spotify-next").addEventListener("click", () => spotifyAction(() => callBackground("spotify:next")));
   $("spotify-prev").addEventListener("click", () => spotifyAction(() => callBackground("spotify:previous")));
   $("spotify-pin").addEventListener("click", () => void toggleSpotifyPin());
-
-  $("spotify-copy-redirect")?.addEventListener("click", async () => {
-    playClick();
-    const uri = fillSpotifyRedirect();
-    try {
-      await navigator.clipboard.writeText(uri);
-      $("spotify-copy-redirect").textContent = "Copied";
-      setTimeout(() => { $("spotify-copy-redirect").textContent = "Copy"; }, 1500);
-    } catch {
-      setSpotifyError("Couldn't copy — select the URI and copy it manually.");
-    }
-  });
 
   storage.onChange((changes) => {
     if (changes.spotifyAuth || changes.spotifyAuthPending) {

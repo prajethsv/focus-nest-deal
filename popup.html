@@ -34,7 +34,9 @@
           <h1 class="display small" id="greeting">Today</h1>
         </div>
         <div class="header-actions">
-          <button id="sound-btn" class="icon-btn" aria-label="Mute sounds" aria-pressed="false" title="Sound">🔔</button>
+          <button id="sound-btn" class="icon-btn" aria-label="Mute sounds" aria-pressed="false" title="Sound">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="M15 9.5a4 4 0 0 1 0 5M17.5 7a7.5 7.5 0 0 1 0 10"/></svg>
+          </button>
         </div>
       </header>
 
@@ -85,7 +87,9 @@
             <label class="sr-only" for="new-task">New task</label>
             <input type="text" id="new-task" class="task-input" placeholder="Add a task…"
                    autocomplete="off" maxlength="120" />
-            <button type="submit" class="primary" aria-label="Add task">+</button>
+            <button type="submit" class="primary icon-button" aria-label="Add task">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
           </form>
           <ul id="task-list" class="task-list"></ul>
           <p id="tasks-empty" class="empty">Nothing here yet — add one small thing you'd like to finish.</p>
@@ -96,16 +100,21 @@
           <div class="spotify-glow" aria-hidden="true"></div>
           <div class="spotify-content">
             <div class="card-head">
-              <h2 id="music-heading">Music</h2>
+              <div class="spotify-title-wrap">
+                <p class="spotify-eyebrow">Soundtrack</p>
+                <h2 id="music-heading">Now playing</h2>
+              </div>
               <div class="spotify-head-actions">
                 <span id="spotify-pill" class="pill">Disconnected</span>
                 <div id="spotify-corner" class="spotify-corner" hidden role="group" aria-label="Pinned player corner">
-                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="bottom-left" title="Bottom left" aria-label="Pin bottom left">↙</button>
-                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="bottom-right" title="Bottom right" aria-label="Pin bottom right">↘</button>
-                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="top-left" title="Top left" aria-label="Pin top left">↖</button>
-                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="top-right" title="Top right" aria-label="Pin top right">↗</button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="bottom-left" title="Bottom left" aria-label="Pin bottom left"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m17 7-10 10M7 11v6h6"/></svg></button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="bottom-right" title="Bottom right" aria-label="Pin bottom right"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10m0-6v6h-6"/></svg></button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="top-left" title="Top left" aria-label="Pin top left"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m17 17-10-10m0 6V7h6"/></svg></button>
+                  <button type="button" class="icon-btn spotify-corner-btn" data-corner="top-right" title="Top right" aria-label="Pin top right"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 17 10-10m0 6V7h-6"/></svg></button>
                 </div>
-                <button id="spotify-pin" class="icon-btn spotify-pin" aria-label="Pin player on websites" aria-pressed="false" title="Pin over websites" hidden>📌</button>
+                <button id="spotify-pin" class="icon-btn spotify-pin" aria-label="Pin player on websites" aria-pressed="false" title="Pin over websites" hidden>
+                  <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 4 6 0 1 5 3 3-5 1-2 7-2-7-5-1 3-3 1-5Z"/><path d="M12 18v3"/></svg>
+                </button>
               </div>
             </div>
             <div id="spotify-body">
@@ -119,28 +128,15 @@
                 </div>
               </div>
               <div class="spotify-transport row">
-                <button id="spotify-prev" class="ghost spotify-ctrl" aria-label="Previous track" hidden>⏮</button>
-                <button id="spotify-toggle" class="primary spotify-play" aria-label="Play or pause" hidden>▶</button>
-                <button id="spotify-next" class="ghost spotify-ctrl" aria-label="Next track" hidden>⏭</button>
+                <button id="spotify-prev" class="ghost spotify-ctrl icon-button" aria-label="Previous track" hidden><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6v12M18 7l-7 5 7 5V7Z"/></svg></button>
+                <button id="spotify-toggle" class="primary spotify-play icon-button" aria-label="Play or pause" hidden><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 8 6-8 6V6Z"/></svg></button>
+                <button id="spotify-next" class="ghost spotify-ctrl icon-button" aria-label="Next track" hidden><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6v12M6 7l7 5-7 5V7Z"/></svg></button>
                 <button id="spotify-connect" class="primary">Connect Spotify</button>
                 <button id="spotify-disconnect" class="ghost" hidden>Disconnect</button>
               </div>
-              <div id="spotify-redirect-box" class="spotify-redirect-box">
-                <p class="muted small">Spotify must allow this exact redirect URI (Dashboard → your app → Edit settings → Redirect URIs). Trailing slash matters.</p>
-                <div class="spotify-redirect-row">
-                  <code id="spotify-redirect" class="spotify-redirect-code">…</code>
-                  <button type="button" id="spotify-copy-redirect" class="ghost" title="Copy redirect URI">Copy</button>
-                </div>
+              <div id="spotify-setup" class="spotify-setup" hidden>
+                <p class="muted small">Add your Spotify Client ID in <code>data/spotify.config.js</code>, then reload the extension.</p>
               </div>
-              <details id="spotify-setup" class="setup" hidden>
-                <summary>What setup does Spotify need?</summary>
-                <ol class="setup-steps">
-                  <li>Create an app at developer.spotify.com/dashboard.</li>
-                  <li>Paste its Client ID into <code>data/spotify.config.js</code>.</li>
-                  <li>Add the redirect URI above to that app (must match character-for-character).</li>
-                  <li>Click <strong>Save</strong>, reload this extension, then Connect again.</li>
-                </ol>
-              </details>
               <p id="spotify-error" class="error" role="alert" hidden></p>
               <p id="spotify-pin-note" class="note spotify-pin-note" hidden>Pinned — mini player stays on websites until you unpin.</p>
             </div>
@@ -203,9 +199,9 @@
             <span id="stat-streak-pill" class="pill">0 day streak</span>
           </div>
           <div class="cal-head">
-            <button id="cal-prev" class="icon-btn" aria-label="Previous month">‹</button>
+            <button id="cal-prev" class="icon-btn" aria-label="Previous month"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
             <p id="cal-month" class="cal-month" aria-live="polite">—</p>
-            <button id="cal-next" class="icon-btn" aria-label="Next month">›</button>
+            <button id="cal-next" class="icon-btn" aria-label="Next month"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
           </div>
           <div class="cal-dow" aria-hidden="true">
             <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
@@ -234,7 +230,12 @@
 
       <!-- SETTINGS -->
       <div class="panel" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
-        <section class="card">
+        <div class="settings-intro">
+          <p class="eyebrow">Make it yours</p>
+          <p class="settings-intro-copy">Small choices that make focus feel more like your space.</p>
+        </div>
+
+        <section class="card settings-card settings-card--environment">
           <h2>Environment</h2>
           <nav id="env-picker" class="env-grid settings-envs" role="radiogroup" aria-label="Environment"></nav>
           <div class="row" role="radiogroup" aria-label="Appearance">
@@ -246,7 +247,7 @@
           <p class="muted small">Motion is always off if your system asks for reduced motion.</p>
         </section>
 
-        <section class="card">
+        <section class="card settings-card settings-card--sound">
           <h2>Sound</h2>
           <label class="check"><input type="checkbox" id="set-clicks" /> <span>Button clicks</span></label>
           <label class="check"><input type="checkbox" id="set-chime" /> <span>Session-end chime</span></label>
@@ -255,7 +256,7 @@
           <p id="volume-hint" class="muted small">Tones are generated in the browser — no files, no network.</p>
         </section>
 
-        <section class="card">
+        <section class="card settings-card settings-card--timer">
           <h2>Timer</h2>
           <label class="field"><span>Focus length (min)</span>
             <input type="number" id="set-focus" min="1" max="120" /></label>
@@ -271,7 +272,7 @@
           <label class="check"><input type="checkbox" id="set-ritual" /> <span>“Phone away” moment before focus</span></label>
         </section>
 
-        <section class="card">
+        <section class="card settings-card settings-card--blocker">
           <h2>Distraction blocker</h2>
           <label class="check"><input type="checkbox" id="set-blocker" /> <span>Block my list during focus sessions</span></label>
           <p class="muted small">
@@ -281,7 +282,9 @@
           <form id="block-form" class="row">
             <label class="sr-only" for="block-input">Website to block</label>
             <input type="text" id="block-input" placeholder="e.g. reddit.com" autocomplete="off" />
-            <button type="submit" class="primary" aria-label="Add website">+</button>
+            <button type="submit" class="primary icon-button" aria-label="Add website">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
           </form>
           <p id="block-error" class="error" role="alert" hidden></p>
           <ul id="block-list" class="chip-list"></ul>
@@ -295,7 +298,7 @@
           </div>
         </section>
 
-        <section class="card">
+        <section class="card settings-card settings-card--data">
           <h2>Data</h2>
           <p class="muted">Everything stays on this device in your browser's extension storage.</p>
           <div class="row">

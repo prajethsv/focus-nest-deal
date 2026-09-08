@@ -3,6 +3,20 @@
   --ink: #33291f;
   --muted: #7a6a58;
 }
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 * { box-sizing: border-box; }
 body {
   margin: 0;
@@ -15,7 +29,7 @@ body {
     radial-gradient(120% 90% at 10% 0%, #fbeedd 0%, rgba(251, 238, 221, 0) 60%),
     radial-gradient(100% 80% at 100% 100%, #f2dcc4 0%, rgba(242, 220, 196, 0) 55%),
     linear-gradient(165deg, #fdf5ea, #f4e3cd);
-  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
 }
 .wrap { max-width: 46ch; }
 .mark {
@@ -26,9 +40,9 @@ body {
   margin: 0 0 18px;
 }
 h1 {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-family: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
   font-size: clamp(34px, 7vw, 56px);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.05;
   margin: 0 0 16px;

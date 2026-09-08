@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Lock, Play, SkipBack, SkipForward, Pin } from "lucide-react";
+import { Lock, Pause, Play, RotateCcw, SkipBack, SkipForward, Pin } from "lucide-react";
 
 const EASE = [0.22, 0.61, 0.36, 1];
 
@@ -24,9 +24,15 @@ const TimerMock = () => (
       </div>
       <p className="ext-time">24:59</p>
       <div className="ext-progress"><span style={{ width: "62%" }} /></div>
+      <div className="grid grid-cols-4 gap-1.5 mt-3">
+        {[5, 10, 25, 50].map((preset) => (
+          <span key={preset} className={`ext-preset ${preset === 25 ? "active" : ""}`}>{preset}m</span>
+        ))}
+      </div>
       <div className="flex items-center justify-center gap-2 mt-3.5">
-        <span className="ext-btn ext-btn-primary">Pause</span>
-        <span className="ext-btn ext-btn-ghost">Skip</span>
+        <span className="ext-btn ext-btn-primary inline-flex items-center gap-1.5"><Pause size={12} /> Pause</span>
+        <span className="ext-btn ext-btn-ghost inline-flex items-center gap-1.5"><RotateCcw size={12} /> Reset</span>
+        <span className="ext-btn ext-btn-ghost inline-flex items-center gap-1.5"><SkipForward size={12} /> Skip</span>
       </div>
     </div>
     <p className="ext-quote">"Phone away. Then we begin."</p>
@@ -91,8 +97,11 @@ const SoundMock = () => (
   <div className="mock-inner max-w-sm mx-auto">
     <div className="ext-card">
       <div className="flex items-center justify-between mb-3">
-        <p className="ext-label">Music</p>
-        <span className="pill"><Pin size={10} /> Pinned over websites</span>
+        <div>
+          <p className="ext-label">Soundtrack</p>
+          <p className="ext-card-title">Now playing</p>
+        </div>
+        <span className="pill"><Pin size={10} /> Pinned</span>
       </div>
       <div className="flex items-center gap-3.5">
         <div
@@ -109,7 +118,7 @@ const SoundMock = () => (
         </div>
         <div className="min-w-0">
           <p style={{ margin: 0, fontWeight: 650, fontSize: 14.5 }}>morning pages</p>
-          <p className="muted" style={{ margin: 0, fontSize: 12 }}>lofi for slow work</p>
+        <p className="muted" style={{ margin: 0, fontSize: 12 }}>lofi for slow work</p>
           <div className="eq mt-2" aria-hidden="true"><span /><span /><span /><span /><span /></div>
         </div>
       </div>
@@ -143,8 +152,8 @@ const MemoryMock = () => (
           );
         })}
       </div>
-      <div className="grid grid-cols-3 gap-2 text-center mt-4">
-        {[["12", "sessions"], ["318", "focus min"], ["9", "tasks done"]].map(([n, l]) => (
+      <div className="grid grid-cols-4 gap-2 text-center mt-4">
+        {[["12", "sessions"], ["318", "focus min"], ["9", "done"], ["6", "day streak"]].map(([n, l]) => (
           <div key={l}>
             <p className="display" style={{ fontSize: "1.35rem", margin: 0 }}>{n}</p>
             <p className="muted" style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", margin: 0 }}>{l}</p>
@@ -179,9 +188,9 @@ const CHAPTERS = [
   },
   {
     num: "04",
-    title: "Your music, one click away",
+    title: "Spotify, one click away",
     blurb:
-      "Connect Spotify and control the soundtrack without leaving your flow. Pin a mini player to any corner of any website, tinted by the album art of whatever is playing.",
+      "Connect Spotify and control the soundtrack without leaving your flow. Pin the mini player to any corner of any website, tinted by the album art of whatever is playing.",
     Mock: SoundMock,
   },
   {

@@ -6,6 +6,13 @@
   const ROOT_ID = "focus-nest-spotify-overlay";
   const FALLBACK = { a: "#3d4a5c", b: "#1a222c", c: "#0d1218" };
   const DEFAULT_CORNER = "bottom-right";
+  const ICONS = {
+    prev: '<svg class="fn-ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6v12M18 7l-7 5 7 5V7Z"/></svg>',
+    play: '<svg class="fn-ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 8 6-8 6V6Z"/></svg>',
+    pause: '<svg class="fn-ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12"/></svg>',
+    next: '<svg class="fn-ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6v12M6 7l7 5-7 5V7Z"/></svg>',
+    close: '<svg class="fn-ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>',
+  };
 
   function ensureRoot() {
     let root = document.getElementById(ROOT_ID);
@@ -23,10 +30,10 @@
           <span class="fn-spot-artist">Focus Nest</span>
         </div>
         <div class="fn-spot-controls">
-          <button type="button" class="fn-spot-btn" data-act="prev" aria-label="Previous track">⏮</button>
-          <button type="button" class="fn-spot-btn fn-spot-play" data-act="toggle" aria-label="Play or pause">▶</button>
-          <button type="button" class="fn-spot-btn" data-act="next" aria-label="Next track">⏭</button>
-          <button type="button" class="fn-spot-btn fn-spot-unpin" data-act="unpin" aria-label="Unpin player" title="Unpin">✕</button>
+          <button type="button" class="fn-spot-btn" data-act="prev" aria-label="Previous track">${ICONS.prev}</button>
+          <button type="button" class="fn-spot-btn fn-spot-play" data-act="toggle" aria-label="Play or pause">${ICONS.play}</button>
+          <button type="button" class="fn-spot-btn" data-act="next" aria-label="Next track">${ICONS.next}</button>
+          <button type="button" class="fn-spot-btn fn-spot-unpin" data-act="unpin" aria-label="Unpin player" title="Unpin">${ICONS.close}</button>
         </div>
       </div>
     `;
@@ -70,7 +77,7 @@
       art.removeAttribute("src");
       title.textContent = "Nothing playing";
       artist.textContent = "Focus Nest";
-      play.textContent = "▶";
+       play.innerHTML = ICONS.play;
       play.setAttribute("aria-label", "Play");
       return;
     }
@@ -85,7 +92,7 @@
     } else {
       art.hidden = true;
     }
-    play.textContent = snap.isPlaying ? "⏸" : "▶";
+    play.innerHTML = snap.isPlaying ? ICONS.pause : ICONS.play;
     play.setAttribute("aria-label", snap.isPlaying ? "Pause" : "Play");
   }
 

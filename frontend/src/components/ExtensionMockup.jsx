@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
-import { Bell, BellOff, Check, Pause, Play, RotateCcw } from "lucide-react";
+import {
+  Check,
+  History,
+  Music2,
+  Pause,
+  Pin,
+  Play,
+  RotateCcw,
+  Settings2,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 
-const PRESETS = [15, 25, 45, 60];
+const PRESETS = [5, 10, 25, 50];
 const fmt = (s) =>
   `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
@@ -46,6 +59,85 @@ function NestArt({ stage }) {
         />
       )}
     </svg>
+  );
+}
+
+function SpotifyMock() {
+  return (
+    <div className="ext-card ext-spotify-card">
+      <div className="flex items-center justify-between mb-2">
+        <div>
+          <p className="ext-label">Soundtrack</p>
+          <p className="ext-card-title">Now playing</p>
+        </div>
+        <span className="pill"><Pin size={10} /> Pinned</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="ext-album-art" aria-hidden="true">
+          <Music2 size={18} />
+        </div>
+        <div className="min-w-0">
+          <p className="ext-track-title">morning pages</p>
+          <p className="muted ext-track-meta">lofi for slow work</p>
+        </div>
+      </div>
+      <div className="flex items-center justify-center gap-2 mt-3">
+        <span className="ext-btn ext-btn-ghost ext-icon-control"><SkipBack size={12} /></span>
+        <span className="ext-btn ext-btn-primary ext-icon-control"><Pause size={12} /></span>
+        <span className="ext-btn ext-btn-ghost ext-icon-control"><SkipForward size={12} /></span>
+      </div>
+    </div>
+  );
+}
+
+function HistoryMock() {
+  return (
+    <div className="ext-card">
+      <div className="flex items-center justify-between mb-3">
+        <p className="ext-label">Study history</p>
+        <span className="pill">6 day streak</span>
+      </div>
+      <div className="cal-grid-mock">
+        {Array.from({ length: 28 }, (_, i) => (
+          <span key={i} className={`cal-cell-mock ${[2, 5, 9, 10, 14, 17, 22, 24].includes(i) ? "hot" : ""} ${i === 25 ? "today" : ""}`}>
+            {i + 1}
+          </span>
+        ))}
+      </div>
+      <div className="grid grid-cols-4 gap-2 text-center mt-4">
+        {[["12", "sessions"], ["318", "focus min"], ["9", "done"], ["6", "day streak"]].map(([n, label]) => (
+          <div key={label}>
+            <p className="display ext-stat-number">{n}</p>
+            <p className="muted ext-stat-label">{label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SettingsMock() {
+  return (
+    <div className="ext-settings-stack">
+      <div className="ext-settings-intro">
+        <p className="ext-eyebrow">Make it yours</p>
+        <p className="muted">Small choices that make focus feel more like your space.</p>
+      </div>
+      {[
+        ["Environment", "Cozy · Rainy · Minimal · Nature"],
+        ["Sound", "Button clicks · Session-end chime · Volume"],
+        ["Timer", "Focus length · Breaks · Auto-start"],
+        ["Distraction blocker", "Only active while focus is running"],
+      ].map(([title, detail]) => (
+        <div className="ext-settings-row" key={title}>
+          <div className="flex items-center gap-2">
+            {title === "Distraction blocker" ? <Settings2 size={13} /> : <span className="ext-setting-dot" aria-hidden="true" />}
+            <strong>{title}</strong>
+          </div>
+          <span className="muted">{detail}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -104,7 +196,7 @@ export default function ExtensionMockup() {
           onClick={() => setMuted((m) => !m)}
           data-testid="mock-sound-toggle"
         >
-          {muted ? <BellOff size={14} /> : <Bell size={14} />}
+          {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
         </button>
       </div>
 
@@ -126,6 +218,26 @@ export default function ExtensionMockup() {
           data-testid="mock-tab-nest"
         >
           Nest
+        </button>
+        <button
+          className={`ext-tab ${tab === "history" ? "active" : ""}`}
+          role="tab"
+          aria-selected={tab === "history"}
+          onClick={() => setTab("history")}
+          data-testid="mock-tab-history"
+        >
+          <History size={11} aria-hidden="true" />
+          History
+        </button>
+        <button
+          className={`ext-tab ${tab === "settings" ? "active" : ""}`}
+          role="tab"
+          aria-selected={tab === "settings"}
+          onClick={() => setTab("settings")}
+          data-testid="mock-tab-settings"
+        >
+          <Settings2 size={11} aria-hidden="true" />
+          Settings
         </button>
       </div>
 
@@ -173,6 +285,10 @@ export default function ExtensionMockup() {
                 <RotateCcw size={12} />
                 Reset
               </button>
+              <button className="ext-btn ext-btn-ghost inline-flex items-center gap-1.5">
+                <SkipForward size={12} />
+                Skip
+              </button>
             </div>
           </div>
 
@@ -200,9 +316,10 @@ export default function ExtensionMockup() {
             ))}
           </div>
 
+          <SpotifyMock />
           <p className="ext-quote">"Small steps, warmly repeated."</p>
         </>
-      ) : (
+      ) : tab === "nest" ? (
         <div className="ext-card">
           <div className="flex items-center justify-between">
             <p className="ext-label">The nest</p>
@@ -225,6 +342,10 @@ export default function ExtensionMockup() {
             {sessions} of 4 sessions to the next stage
           </p>
         </div>
+      ) : tab === "history" ? (
+        <HistoryMock />
+      ) : (
+        <SettingsMock />
       )}
     </div>
   );

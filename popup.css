@@ -1,12 +1,24 @@
 /* ==========================================================================
-   Focus Nest — editorial typography, muted gradients, extension-first layout.
-   Fonts are local/system stacks only: an extension cannot safely fetch remote
-   webfonts, so we use high-quality serif + UI sans stacks available on the OS.
+   Focus Nest — quiet editorial typography, warm surfaces, extension-first UI.
    ========================================================================== */
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
 :root {
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+  --serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino,
     Georgia, "Times New Roman", serif;
-  /* One cohesive UI stack — avoid Inter (often missing → inconsistent fallbacks) */
   --sans: "Segoe UI Variable Text", "Segoe UI", "SF Pro Text",
     system-ui, -apple-system, sans-serif;
   --radius: 16px;
@@ -113,7 +125,7 @@ body.dark[data-theme="nature"] {
 /* ---------- typography ---------- */
 .display {
   font-family: var(--serif);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.022em;
   line-height: 1.02;
   font-size: 34px;
@@ -131,7 +143,7 @@ body.dark[data-theme="nature"] {
 h2 {
   font-family: var(--serif);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.01em;
   margin: 0;
 }
@@ -267,7 +279,7 @@ input[type="range"] { accent-color: var(--accent); }
 .timer {
   font-family: var(--serif);
   font-size: 52px;
-  font-weight: 600;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.03em;
   text-align: center;
@@ -592,41 +604,6 @@ input[type="range"] { accent-color: var(--accent); }
   border-color: transparent;
 }
 .spotify-pin-note { text-align: left; margin-top: 10px; }
-.spotify-redirect-box {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-}
-.spotify-card[data-has-spot-colors="true"] .spotify-redirect-box {
-  border-top-color: rgba(255, 255, 255, 0.16);
-}
-.spotify-redirect-box[hidden] { display: none; }
-.spotify-redirect-row {
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  margin-top: 6px;
-}
-.spotify-redirect-code {
-  flex: 1;
-  display: block;
-  padding: 7px 8px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 55%, transparent);
-  font-size: 10px;
-  line-height: 1.35;
-  word-break: break-all;
-}
-.spotify-card[data-has-spot-colors="true"] .spotify-redirect-code {
-  border-color: rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.28);
-  color: #f6f3ee;
-}
-.setup { margin-top: 9px; font-size: 12px; color: var(--muted); }
-.setup summary { cursor: pointer; }
-.setup-steps { margin: 8px 0 0; padding-left: 18px; }
-.setup-steps li { margin-bottom: 4px; }
 code { font-size: 11px; overflow-wrap: anywhere; }
 
 /* ---------- blocker ---------- */
@@ -899,3 +876,625 @@ code { font-size: 11px; overflow-wrap: anywhere; }
 
 /* ---------- confirmation dialog ---------- */
 .confirm-inner { max-width: 260px; }
+
+/* ==========================================================================
+   Fresh settings + soundtrack polish
+   ========================================================================== */
+.settings-intro {
+  padding: 3px 4px 12px;
+}
+.settings-intro-copy {
+  max-width: 28ch;
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+#panel-settings > .settings-card {
+  padding: 16px;
+  border-radius: 18px;
+  box-shadow: 0 7px 22px -16px rgba(24, 18, 12, 0.42);
+}
+#panel-settings > .settings-card + .settings-card {
+  margin-top: 12px;
+}
+#panel-settings .settings-card h2 {
+  margin-bottom: 14px;
+  font-size: 18px;
+}
+#panel-settings .settings-card > .muted.small {
+  margin: 10px 0 0;
+  line-height: 1.45;
+}
+.settings-card--environment .env-grid {
+  gap: 8px;
+  margin: 0 0 14px;
+}
+.settings-card--environment .env-btn {
+  min-height: 58px;
+  padding: 9px 4px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--bg) 42%, transparent);
+}
+.settings-card--environment .env-btn[aria-checked="true"] {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+#panel-settings > .settings-card--environment > .row {
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--bg) 44%, transparent);
+}
+#panel-settings .appearance-btn {
+  flex: 1;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 9px;
+  color: var(--muted);
+  background: transparent;
+  box-shadow: none;
+}
+#panel-settings .appearance-btn:hover:not(:disabled) {
+  color: var(--ink);
+  transform: none;
+}
+#panel-settings .appearance-btn.primary,
+#panel-settings .appearance-btn[aria-checked="true"] {
+  color: #fff;
+  background: var(--accent);
+}
+#panel-settings .field {
+  min-height: 36px;
+  margin-top: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+#panel-settings .field:last-of-type {
+  border-bottom: 0;
+}
+#panel-settings .field input[type="number"] {
+  width: 68px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+#panel-settings .check {
+  min-height: 38px;
+  margin-top: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+#panel-settings .check:last-of-type {
+  border-bottom: 0;
+}
+#panel-settings .check input[type="checkbox"] {
+  appearance: none;
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex: none;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 18%, transparent);
+  cursor: pointer;
+  transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+#panel-settings .check input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.18s var(--ease), background 0.18s var(--ease);
+}
+#panel-settings .check input[type="checkbox"]:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+#panel-settings .check input[type="checkbox"]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+#panel-settings .check input[type="checkbox"]:focus-visible {
+  box-shadow: var(--ring);
+}
+#panel-settings .permission {
+  margin-top: 14px;
+  padding-top: 12px;
+}
+.settings-card--data .row {
+  gap: 6px;
+}
+.settings-card--data button {
+  flex: 1;
+}
+
+.spotify-card {
+  padding: 15px;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px -18px rgba(24, 18, 12, 0.5);
+}
+.spotify-card .card-head {
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.spotify-title-wrap {
+  display: grid;
+  gap: 2px;
+}
+.spotify-eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.spotify-title-wrap h2 {
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+.spotify-head-actions {
+  gap: 5px;
+}
+.spotify-card .pill {
+  padding: 4px 8px;
+  font-size: 10px;
+  background: color-mix(in srgb, var(--bg) 48%, transparent);
+}
+.spotify-glow {
+  inset: auto -42px -54px auto;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  filter: blur(26px) saturate(0.9);
+  opacity: 0;
+}
+.spotify-card[data-has-spot-colors="true"] {
+  border-color: color-mix(in srgb, var(--spot-a) 36%, var(--line));
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--spot-a) 20%, transparent), transparent 58%),
+    var(--surface);
+  box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--spot-a) 65%, transparent);
+}
+.spotify-card[data-has-spot-colors="true"] .spotify-glow {
+  opacity: 0.28;
+}
+.spotify-status {
+  margin: 0 0 11px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.spotify-track {
+  gap: 10px;
+  margin: 0;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg) 42%, transparent);
+}
+.spotify-art {
+  width: 62px;
+  height: 62px;
+  border-radius: 10px;
+  box-shadow: 0 7px 15px -10px rgba(0, 0, 0, 0.6);
+}
+.spotify-track-text {
+  gap: 1px;
+}
+.spotify-track-text strong {
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+.spotify-track-text span {
+  font-size: 11.5px;
+}
+.spotify-transport {
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.spotify-ctrl,
+.spotify-play {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+}
+.spotify-play {
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+}
+#spotify-connect {
+  flex: 1;
+  min-height: 38px;
+  margin-left: 2px;
+  border-radius: 11px;
+}
+#spotify-disconnect {
+  margin-left: auto;
+}
+.spotify-pin-note {
+  margin-top: 9px;
+  font-size: 11px;
+}
+@media (prefers-reduced-motion: reduce) {
+  #panel-settings .check input[type="checkbox"]::after {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Translucent refresh — softer surfaces, actual iconography, stronger type
+   ========================================================================== */
+.ui-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+}
+button.icon-button .ui-icon {
+  width: 17px;
+  height: 17px;
+}
+#spotify-toggle .ui-icon {
+  width: 18px;
+  height: 18px;
+}
+
+body {
+  padding: 16px 15px 18px;
+}
+.display,
+h2,
+.timer,
+.spotify-track-text strong,
+.settings-intro-copy {
+  font-weight: 700;
+}
+.display.small {
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+.app-head {
+  align-items: center;
+  margin-bottom: 14px;
+}
+.header-actions {
+  gap: 7px;
+}
+
+.card {
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, #ffffff 10%, transparent), transparent 62%),
+    color-mix(in srgb, var(--bg) 24%, transparent);
+  box-shadow:
+    0 22px 46px -32px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent);
+  backdrop-filter: blur(20px) saturate(1.18);
+  -webkit-backdrop-filter: blur(20px) saturate(1.18);
+}
+.pill {
+  padding: 5px 10px;
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  background: color-mix(in srgb, var(--bg) 14%, transparent);
+  backdrop-filter: blur(14px);
+}
+button {
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: none;
+}
+button:hover:not(:disabled) {
+  box-shadow: 0 8px 18px -14px var(--accent);
+}
+button.primary {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent-2) 92%, #fff), var(--accent));
+  box-shadow: 0 10px 20px -16px var(--accent);
+}
+button.ghost,
+.icon-btn {
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  background: color-mix(in srgb, var(--bg) 12%, transparent);
+  backdrop-filter: blur(14px);
+}
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 33px;
+  height: 33px;
+  padding: 0;
+  border-radius: 50%;
+}
+.icon-btn .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+input[type="text"],
+input[type="number"] {
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  background: color-mix(in srgb, var(--bg) 16%, transparent);
+  backdrop-filter: blur(12px);
+}
+body.dark input,
+body[data-theme="rainy"] input {
+  background: color-mix(in srgb, #ffffff 7%, transparent);
+}
+
+.tabbar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin: 0 0 14px;
+  padding: 4px 3px 3px;
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg) 11%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent);
+  backdrop-filter: blur(20px) saturate(1.2);
+}
+.tab {
+  position: relative;
+  padding: 7px 4px 8px;
+  border: 0;
+  border-radius: 11px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: none;
+}
+.tab:hover:not([aria-selected="true"]) {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+.tab[aria-selected="true"] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--bg) 28%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  right: 24%;
+  bottom: 2px;
+  left: 24%;
+  height: 2px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+
+.env-grid {
+  gap: 7px;
+}
+.settings-card--environment .env-grid {
+  margin-bottom: 13px;
+}
+.env-btn {
+  min-height: 64px;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.env-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  transform: none;
+}
+.env-btn[aria-checked="true"] {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+.env-icon {
+  width: 32px;
+  height: 32px;
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  border-radius: 11px;
+  background: linear-gradient(145deg, color-mix(in srgb, #fff 34%, transparent), transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 20%, transparent);
+}
+.env-icon--cozy {
+  background: radial-gradient(circle at 65% 35%, #e7ad65 0 16%, transparent 18%), linear-gradient(145deg, #8f5b40, #d7a263);
+}
+.env-icon--rainy {
+  background: linear-gradient(145deg, #718da4, #2c3c4e);
+}
+.env-icon--minimal {
+  background: linear-gradient(145deg, #f2f1ed, #a9a49c);
+}
+.env-icon--nature {
+  background: radial-gradient(circle at 30% 35%, #a7d29b 0 11%, transparent 13%), linear-gradient(145deg, #456c52, #9bbb78);
+}
+.env-btn small {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.task-input {
+  min-height: 39px;
+}
+#task-form .icon-button,
+#block-form .icon-button {
+  width: 39px;
+  height: 39px;
+  border-radius: 12px;
+}
+.task-del {
+  display: inline-grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border-radius: 8px;
+  color: var(--muted);
+}
+.task-del .ui-icon,
+.chip button .ui-icon {
+  width: 14px;
+  height: 14px;
+}
+.task-del:hover,
+.chip button:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.spotify-card {
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--spot-a) 13%, transparent), transparent 58%),
+    color-mix(in srgb, var(--bg) 24%, transparent);
+}
+.spotify-glow {
+  inset: auto -70px -95px auto;
+  width: 230px;
+  height: 230px;
+  filter: blur(38px) saturate(0.85);
+  opacity: 0;
+}
+.spotify-card[data-has-spot-colors="true"] .spotify-glow {
+  opacity: 0.28;
+}
+.spotify-title-wrap h2 {
+  font-size: 24px;
+  letter-spacing: -0.035em;
+}
+.spotify-eyebrow {
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+.spotify-card .pill {
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  background: color-mix(in srgb, var(--bg) 13%, transparent);
+}
+.spotify-track {
+  gap: 12px;
+  margin: 10px 0 12px;
+  padding: 9px;
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg) 13%, transparent);
+  backdrop-filter: blur(14px);
+}
+.spotify-art {
+  width: 68px;
+  height: 68px;
+  border-radius: 12px;
+}
+.spotify-track-text strong {
+  font-size: 17px;
+}
+.spotify-transport {
+  gap: 7px;
+  margin-top: 13px;
+  padding-top: 13px;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.spotify-ctrl,
+.spotify-play {
+  min-width: 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+}
+.spotify-play {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+}
+#spotify-connect {
+  min-height: 42px;
+  border-radius: 12px;
+}
+#spotify-disconnect {
+  min-height: 38px;
+  margin-left: auto;
+}
+.spotify-setup {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.spotify-setup p {
+  margin: 0;
+  line-height: 1.45;
+}
+.spotify-corner {
+  gap: 3px;
+}
+.spotify-corner-btn {
+  width: 27px;
+  height: 27px;
+}
+.spotify-pin[aria-pressed="true"] {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.settings-card {
+  border-color: color-mix(in srgb, var(--ink) 10%, transparent) !important;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, #fff 8%, transparent), transparent 62%),
+    color-mix(in srgb, var(--bg) 18%, transparent) !important;
+}
+#panel-settings .settings-card h2 {
+  font-size: 20px;
+  letter-spacing: -0.03em;
+}
+#panel-settings .settings-card > .row[role="radiogroup"] {
+  background: color-mix(in srgb, var(--bg) 11%, transparent);
+  border-color: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+#panel-settings .appearance-btn {
+  border-radius: 9px;
+}
+#panel-settings .appearance-btn.primary,
+#panel-settings .appearance-btn[aria-checked="true"] {
+  background: color-mix(in srgb, var(--accent) 78%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent);
+}
+#panel-settings .field,
+#panel-settings .check {
+  border-color: color-mix(in srgb, var(--ink) 9%, transparent);
+}
+#panel-settings .check input[type="checkbox"] {
+  background: color-mix(in srgb, var(--ink) 13%, transparent);
+}
+#panel-settings .check input[type="checkbox"]:checked {
+  background: var(--accent);
+}
+
+.decor-leaves {
+  top: -22px;
+  width: 11px;
+  height: 18px;
+  border-radius: 100% 0 100% 0;
+  opacity: 0.38;
+  background: linear-gradient(145deg, rgba(179, 214, 157, 0.85), rgba(75, 117, 78, 0.18));
+  transform-origin: 100% 100%;
+}

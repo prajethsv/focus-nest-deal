@@ -29,7 +29,6 @@ export function renderDecor(layer, environmentId, animationsOn) {
     el.style.setProperty("--dur", `${rand(9, 22).toFixed(2)}s`);
     el.style.setProperty("--scale", rand(0.55, 1.25).toFixed(2));
     el.style.setProperty("--drift", `${rand(-26, 26).toFixed(1)}px`);
-    if (env.decor.kind === "leaves") el.textContent = Math.random() > 0.5 ? "🍃" : "🌿";
     frag.append(el);
   }
   layer.append(frag);
