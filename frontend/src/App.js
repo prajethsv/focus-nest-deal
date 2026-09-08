@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import Lenis from "lenis";
 import { Toaster } from "sonner";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
@@ -23,25 +22,6 @@ export default function App() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("fn-theme", theme);
   }, [theme]);
-
-  useEffect(() => {
-    const coarse = window.matchMedia("(pointer: coarse)").matches;
-    if (coarse || window.innerWidth < 768) return undefined;
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-    window.__lenis = lenis;
-    let alive = true;
-    const raf = (time) => {
-      if (!alive) return;
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
-    return () => {
-      alive = false;
-      lenis.destroy();
-      window.__lenis = null;
-    };
-  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

@@ -17,10 +17,12 @@ export default function Particles() {
     const canvas = ref.current;
     const ctx = canvas.getContext("2d");
     let raf;
+    let lastFrame = 0;
     let w = 0;
     let h = 0;
     const smallScreen = window.innerWidth < 768;
-    const dpr = smallScreen ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = smallScreen ? 1 : Math.min(window.devicePixelRatio || 1, 1.25);
+    const frameInterval = 1000 / 30;
 
     const resize = () => {
       w = canvas.width = window.innerWidth * dpr;
@@ -31,8 +33,8 @@ export default function Particles() {
     resize();
     window.addEventListener("resize", resize);
 
-      const N = smallScreen ? 16 : 42;
-      const ps = Array.from({ length: N }, () => ({
+    const N = smallScreen ? 10 : 26;
+    const ps = Array.from({ length: N }, () => ({
       x: Math.random(),
       y: Math.random(),
       s: 0.4 + Math.random() * 1.2,
@@ -43,7 +45,16 @@ export default function Particles() {
 
     const col = COLORS[theme] || COLORS.cozy;
 
-    const tick = () => {
+    const tick = (time) => {
+      if (time - lastFrame < frameInterval) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      lastFrame = time;
+      if (document.hidden) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
       ctx.clearRect(0, 0, w, h);
       for (const p of ps) {
         if (theme === "rainy") {

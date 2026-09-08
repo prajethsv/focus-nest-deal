@@ -30,7 +30,7 @@ export default function Nav() {
         <button
           className="nav-wordmark"
           style={{ background: "none", border: 0, cursor: "pointer", padding: 0 }}
-          onClick={() => window.__lenis?.scrollTo(0)}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           data-testid="nav-logo"
         >
           <NestMark />
